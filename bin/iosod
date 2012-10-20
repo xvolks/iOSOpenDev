@@ -646,6 +646,7 @@ function buildPackage() # args: packageDir, outputDir, versionPList [, useZOptio
 	local packageFileName
 	local packageName
 	local zipFileName
+	local dpkgdebPath
 	
 	echo "Preparing to build package..."
 	
@@ -657,7 +658,9 @@ function buildPackage() # args: packageDir, outputDir, versionPList [, useZOptio
 
 	[[ "$versionPList" == "" ]] || \
 		requireFile "$versionPList" false
-
+		
+	dpkgdebPath=`which dpkg-deb` || panic $? "Failed to get dpkg-deb path"
+	
 	# cleanup #
 
 	[[ ! -f "$subFileControlTxtToRemove" ]] || \
@@ -688,7 +691,19 @@ function buildPackage() # args: packageDir, outputDir, versionPList [, useZOptio
 		
 	# create package #
 
-	createDebianPackage "$packageDir" "$packageName" "$outputDir"
+	packageFileName="$outputDir/${packageName}.deb"
+
+	echo -n "Building package $packageFileName... "
+	
+	export COPYFILE_DISABLE=true
+	export COPY_EXTENDED_ATTRIBUTES_DISABLE=true
+	
+	"$dpkgdebPath" -b "$packageDir" "$packageFileName" &> /dev/null || \
+		panic $? "Failed."
+
+	echo "Done."
+
+#	createDebianPackage "$packageDir" "$packageName" "$outputDir"
 	
 	# create zip #
 	
