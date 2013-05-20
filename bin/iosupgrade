@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Install iOSOpenDev after an XCode upgrade
+# this script must be run as root !
+
+if [ $EUID -ne 0 ]; then
+	echo You must run this script as root !
+	echo For example : sudo $0 [sdk]
+	exit 1
+fi
+
+LOCATION=`system_profiler SPDeveloperToolsDataType|grep Location:|uniq`
+LOCATION=`echo $LOCATION | sed -e 's/ *Location: *//g'`
+echo Default XCode installation path is $LOCATION
+echo Swiching tools to use $LOCATION 
+xcode-select --switch $LOCATION
+echo Setting up XCode to use iOSOpenDev
+iod-setup sdk -d  `xcode-select --print-path`
+if [ "$1" == ""]; then
+	echo No SDK specified : using Default
+	echo For example : sudo $0 iphoneos5.1
+else
+	echo Setting SDK $1
+	iod-setup sdk -sdk $1
+fi
