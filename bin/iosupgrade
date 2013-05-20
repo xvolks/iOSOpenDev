@@ -16,7 +16,7 @@ echo Swiching tools to use $LOCATION
 xcode-select --switch $LOCATION
 echo Setting up XCode to use iOSOpenDev
 iod-setup sdk -d  `xcode-select --print-path`
-if [ "$1" == ""]; then
+if [ "$1" == "" ]; then
 	echo No SDK specified : using Default
 	echo For example : sudo $0 iphoneos5.1
 else
