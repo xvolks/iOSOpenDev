@@ -1622,6 +1622,12 @@ function xcodeBuildPhase() # no args
 		signCode "$builtExecutable" "$CODE_SIGN_IDENTITY"
 	fi
 
+	if [[ "$XvolksSignBinary" != "" ]]; then
+		echo Signing extra binary $XvolksSignBinary
+		ldid -S $XvolksSignBinary
+	fi
+
+
 	changeMode "$INSTALL_MODE_FLAG" "$builtExecutable"
 
 	# if doing any and iOSOpenDevCopyOnBuild is YES, then copy executable to device ...
