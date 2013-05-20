@@ -1662,7 +1662,13 @@ function xcodeBuildPhase() # no args
 		[[ "$iOSOpenDevUsePackageVersionPList" != "YES" ]] || \
 			versionPListPath="$packageVersionPListPath"			
 		
+		echo Script before package build : ${XvolksScriptBeforePackage}
+		${XvolksScriptBeforePackage}
+
 		buildPackage "$packageDirectory" "$allPackagesDir" "$versionPListPath" true
+
+		echo Script after package build : ${XvolksScriptAfterPackage}
+		${XvolksScriptAfterPackage}
 		
 		# if more than just $iOSOpenDevBuildPackageOnAnyBuild == "YES" ...
 		if [[ "$CONFIGURATION" == "Release" && "$VALIDATE_PRODUCT" == "YES" ]] || [[ "$iOSOpenDevInstallOnAnyBuild" == "YES" ]]; then
