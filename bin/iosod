@@ -659,7 +659,7 @@ function buildPackage() # args: packageDir, outputDir, versionPList [, useZOptio
 	[[ "$versionPList" == "" ]] || \
 		requireFile "$versionPList" false
 		
-	dpkgdebPath=`which dpkg-deb` || panic $? "Failed to get dpkg-deb path"
+	dpkgdebPath=`which dpkg-deb` || dpkgdebPath=/opt/local/bin/dpkg-deb;echo WARN : $dpkgdebPath "Failed to get dpkg-deb path"
 	
 	# cleanup #
 
